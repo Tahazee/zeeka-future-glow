@@ -156,4 +156,64 @@ All colors MUST be HSL.
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  @keyframes crystal {
+    0%, 100% { 
+      transform: translateY(0) rotateX(0deg) rotateY(0deg);
+      filter: brightness(1);
+    }
+    33% { 
+      transform: translateY(-8px) rotateX(5deg) rotateY(5deg);
+      filter: brightness(1.2);
+    }
+    66% { 
+      transform: translateY(-4px) rotateX(-5deg) rotateY(-5deg);
+      filter: brightness(0.9);
+    }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes prism {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(165 100% 50% / 0.3),
+                  0 0 40px hsl(188 100% 50% / 0.2),
+                  inset 0 0 20px hsl(275 100% 51% / 0.1);
+    }
+    50% {
+      box-shadow: 0 0 30px hsl(188 100% 50% / 0.4),
+                  0 0 60px hsl(165 100% 50% / 0.3),
+                  inset 0 0 30px hsl(275 100% 51% / 0.2);
+    }
+  }
+
+  .animate-crystal {
+    animation: crystal 6s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.6s var(--ease-smooth) forwards;
+  }
+
+  .animate-prism {
+    animation: prism 4s ease-in-out infinite;
+  }
 }
