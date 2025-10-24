@@ -15,7 +15,7 @@ export const Hero = () => {
         const rect = heroRef.current.getBoundingClientRect();
         const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
         const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-        setMousePosition({ x, y });
+        setMousePosition({ x: x * 0.5, y: y * 0.5 }); // Dampen mouse movement
       }
     };
 
@@ -24,14 +24,14 @@ export const Hero = () => {
         const scrollY = window.scrollY;
         const elements = heroRef.current.querySelectorAll('[data-parallax]');
         elements.forEach((el) => {
-          const speed = parseFloat((el as HTMLElement).dataset.parallax || '1');
-          (el as HTMLElement).style.transform = `translateY(${scrollY * speed}px)`;
+          const speed = parseFloat((el as HTMLElement).dataset.parallax || '0');
+          (el as HTMLElement).style.transform = `translateY(${scrollY * speed * 0.1}px)`; // Reduce parallax intensity
         });
       }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -67,12 +67,11 @@ export const Hero = () => {
       />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start">
           
           {/* LEFT CARD - Featured Course/Experience (25%) */}
           <div 
-            className="lg:col-span-3 space-y-6"
-            data-parallax="0.6"
+            className="lg:col-span-3 space-y-4 md:space-y-6"
           >
             {/* Main Featured Card */}
             <div className="glass-card rounded-2xl p-6 shadow-3d animate-fade-in-up group hover:shadow-glow-green transition-all duration-500">
@@ -159,18 +158,18 @@ export const Hero = () => {
             </div>
           </div>
 
-          {/* CENTER - 3D Element with Floating Objects (50%) */}
+      {/* CENTER - 3D Element with Floating Objects (50%) */}
           <div 
-            className="lg:col-span-6 relative"
-            data-parallax="0.4"
+            className="lg:col-span-6 relative perspective-[1000px]"
           >
-            <div className="relative min-h-[500px] flex items-center justify-center">
+            <div className="relative min-h-[400px] md:min-h-[500px] flex items-center justify-center py-8">
               {/* Central 3D Object */}
               <div 
-                className="relative w-64 h-64 preserve-3d animate-fade-in"
+                className="relative w-48 h-48 md:w-64 md:h-64 animate-fade-in"
                 style={{
-                  transform: `perspective(1000px) rotateY(${mousePosition.x * 10}deg) rotateX(${-mousePosition.y * 10}deg)`,
-                  transition: 'transform 0.3s ease-out'
+                  transform: `rotateY(${mousePosition.x * 15}deg) rotateX(${-mousePosition.y * 15}deg)`,
+                  transition: 'transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1)',
+                  transformStyle: 'preserve-3d'
                 }}
               >
                 {/* Core circle with glow */}
@@ -185,10 +184,10 @@ export const Hero = () => {
               {/* Floating 3D Objects around center */}
               {/* Top Left - VR Image */}
               <div 
-                className="absolute top-8 left-8 w-32 h-32 preserve-3d animate-float"
+                className="absolute top-4 left-4 md:top-8 md:left-8 w-24 h-24 md:w-32 md:h-32 animate-float"
                 style={{ 
                   animationDelay: '0s',
-                  transform: `perspective(1000px) rotateY(${mousePosition.x * -8}deg) rotateX(${mousePosition.y * 8}deg)`
+                  transformStyle: 'preserve-3d'
                 }}
               >
                 <div className="glass-card rounded-xl overflow-hidden shadow-glow-green group cursor-pointer">
@@ -205,10 +204,9 @@ export const Hero = () => {
 
               {/* Top Right - Floating ring */}
               <div 
-                className="absolute top-12 right-12 w-24 h-24 animate-float"
+                className="absolute top-6 right-6 md:top-12 md:right-12 w-16 h-16 md:w-24 md:h-24 animate-float"
                 style={{ 
-                  animationDelay: '0.8s',
-                  transform: `perspective(1000px) rotateY(${mousePosition.x * 12}deg)`
+                  animationDelay: '0.8s'
                 }}
               >
                 <div className="w-full h-full rounded-full border-4 border-accent-cyan/40 shadow-glow-aqua" />
@@ -217,7 +215,7 @@ export const Hero = () => {
 
               {/* Bottom Left - Small orb */}
               <div 
-                className="absolute bottom-16 left-16 w-16 h-16 animate-float"
+                className="absolute bottom-8 left-8 md:bottom-16 md:left-16 w-12 h-12 md:w-16 md:h-16 animate-float"
                 style={{ animationDelay: '1.2s' }}
               >
                 <div className="w-full h-full rounded-full bg-gradient-to-br from-accent-green to-accent-cyan shadow-glow-green animate-glow-pulse" />
@@ -225,10 +223,10 @@ export const Hero = () => {
 
               {/* Bottom Right - Workspace Image */}
               <div 
-                className="absolute bottom-8 right-8 w-32 h-32 preserve-3d animate-float"
+                className="absolute bottom-4 right-4 md:bottom-8 md:right-8 w-24 h-24 md:w-32 md:h-32 animate-float"
                 style={{ 
                   animationDelay: '0.4s',
-                  transform: `perspective(1000px) rotateY(${mousePosition.x * -10}deg) rotateX(${mousePosition.y * -10}deg)`
+                  transformStyle: 'preserve-3d'
                 }}
               >
                 <div className="glass-card rounded-xl overflow-hidden shadow-glow-aqua group cursor-pointer">
@@ -245,7 +243,7 @@ export const Hero = () => {
 
               {/* Left floating cube */}
               <div 
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-20 h-20 animate-float"
+                className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 animate-float"
                 style={{ animationDelay: '1.6s' }}
               >
                 <div className="glass-card w-full h-full shadow-glow-purple transform rotate-45" />
@@ -253,7 +251,7 @@ export const Hero = () => {
 
               {/* Right floating element */}
               <div 
-                className="absolute right-4 top-1/3 w-12 h-12 animate-float"
+                className="hidden md:block absolute right-2 md:right-4 top-1/3 w-10 h-10 md:w-12 md:h-12 animate-float"
                 style={{ animationDelay: '2s' }}
               >
                 <div className="w-full h-full rounded-lg border-2 border-accent-green/40 shadow-glow-green rotate-12" />
@@ -263,8 +261,7 @@ export const Hero = () => {
 
           {/* RIGHT SIDEBAR - Stats & Info (25%) */}
           <div 
-            className="lg:col-span-3 space-y-6"
-            data-parallax="0.8"
+            className="lg:col-span-3 space-y-4 md:space-y-6"
           >
             {/* Attendance/Analytics Chart */}
             <div className="glass-card rounded-2xl p-5 shadow-3d animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
