@@ -8,59 +8,42 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Zeeka Dark Cyber Theme */
-    --background: 0 0% 7%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 100%;
-
-    --card: 0 0% 11%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 11%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 100%;
-
-    --primary: 279 100% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 187 100% 50%;
-    --secondary-foreground: 0 0% 7%;
-
-    --muted: 0 0% 30%;
-    --muted-foreground: 0 0% 75%;
-
-    --accent: 187 100% 50%;
-    --accent-foreground: 0 0% 7%;
-
-    --destructive: 0 84.2% 60.2%;
+    --primary: 165 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 187 100% 50%;
-
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 165 100% 50%;
     --radius: 0.75rem;
 
-    /* Custom Zeeka tokens */
-    --neon-cyan: 187 100% 50%;
-    --neon-purple: 279 100% 50%;
-    --deep-charcoal: 0 0% 7%;
-    --card-bg: 0 0% 11%;
-    --text-grey: 0 0% 75%;
-    --silver-light: 0 0% 50%;
-    --silver-dark: 0 0% 30%;
+    /* Custom Glassmorphism Colors */
+    --neon-green: 165 100% 50%;
+    --neon-aqua: 180 100% 50%;
+    --glass-bg: 0 0% 0%;
+    --glass-border: 0 0% 20%;
 
     /* Gradients */
-    --gradient-cyber: linear-gradient(135deg, hsl(187 100% 50%) 0%, hsl(279 100% 50%) 100%);
-    --gradient-silver: linear-gradient(180deg, hsl(0 0% 30%) 0%, hsl(0 0% 50%) 100%);
-    --gradient-hero: radial-gradient(ellipse at top, hsl(279 100% 50% / 0.15), transparent 50%);
-    
-    /* Shadows & Glows */
-    --shadow-cyan: 0 0 20px hsl(187 100% 50% / 0.3);
-    --shadow-purple: 0 0 30px hsl(279 100% 50% / 0.4);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.5);
-    
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-glow: all 0.4s ease-in-out;
+    --gradient-glass: linear-gradient(135deg, hsl(165 100% 50% / 0.1), hsl(180 100% 50% / 0.1));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(165 100% 50% / 0.2), transparent);
+    --gradient-hero: radial-gradient(ellipse at top, hsl(0 0% 8%), hsl(0 0% 4%));
+
+    /* Shadows */
+    --shadow-glow-green: 0 0 30px hsl(165 100% 50% / 0.5), 0 0 60px hsl(165 100% 50% / 0.3);
+    --shadow-glow-aqua: 0 0 30px hsl(180 100% 50% / 0.5), 0 0 60px hsl(180 100% 50% / 0.3);
+    --shadow-glass: 0 8px 32px 0 hsl(0 0% 0% / 0.5);
   }
 }
 

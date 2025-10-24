@@ -47,11 +47,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        cyber: {
-          cyan: "hsl(var(--neon-cyan))",
-          purple: "hsl(var(--neon-purple))",
-          charcoal: "hsl(var(--deep-charcoal))",
-          silver: "hsl(var(--silver-light))",
+        glass: {
+          DEFAULT: "hsl(var(--glass-bg) / 0.3)",
+          border: "hsl(var(--glass-border))",
+        },
+        neon: {
+          green: "hsl(var(--neon-green))",
+          aqua: "hsl(var(--neon-aqua))",
         },
       },
       borderRadius: {
@@ -63,16 +65,17 @@ export default {
         sans: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'gradient-cyber': 'var(--gradient-cyber)',
-        'gradient-silver': 'var(--gradient-silver)',
+        'gradient-glass': 'var(--gradient-glass)',
+        'gradient-glow': 'var(--gradient-glow)',
         'gradient-hero': 'var(--gradient-hero)',
       },
       boxShadow: {
-        'cyan': 'var(--shadow-cyan)',
-        'purple': 'var(--shadow-purple)',
-        'card': 'var(--shadow-card)',
-        'glow-cyan': '0 0 20px hsl(187 100% 50% / 0.5), 0 0 40px hsl(187 100% 50% / 0.3)',
-        'glow-purple': '0 0 20px hsl(279 100% 50% / 0.5), 0 0 40px hsl(279 100% 50% / 0.3)',
+        'glass': 'var(--shadow-glass)',
+        'glow-green': 'var(--shadow-glow-green)',
+        'glow-aqua': 'var(--shadow-glow-aqua)',
+      },
+      backdropBlur: {
+        'glass': '20px',
       },
       keyframes: {
         "accordion-down": {

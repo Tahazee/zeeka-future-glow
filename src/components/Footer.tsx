@@ -1,47 +1,48 @@
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
 const socialLinks = [
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Mail, href: "#contact", label: "Contact" },
+  { icon: Github, href: "#", name: "GitHub" },
+  { icon: Twitter, href: "#", name: "Twitter" },
+  { icon: Linkedin, href: "#", name: "LinkedIn" },
+  { icon: Mail, href: "#contact", name: "Email" },
 ];
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="bg-card/50 border-t border-border py-12">
+    <footer className="py-12 border-t border-glass-border backdrop-blur-glass bg-glass">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          {/* Left: Logo & Tagline */}
-          <div className="space-y-3">
-            <h3 className="text-2xl font-black">
-              <span className="bg-gradient-cyber bg-clip-text text-transparent">
-                ZEEKA
-              </span>
+          {/* Left: Logo and tagline */}
+          <div>
+            <h3 className="text-2xl font-black mb-2 text-neon-green">
+              NEXTGEN SYSTEMS
             </h3>
-            <p className="text-muted-foreground text-sm">
-              Automate Intelligence. Accelerate Tomorrow.
+            <p className="text-sm text-muted-foreground">
+              Crafting tomorrow's digital experiences today.
             </p>
           </div>
 
-          {/* Right: Social Links */}
-          <div className="flex justify-start md:justify-end gap-4">
+          {/* Right: Social links */}
+          <div className="flex gap-4 justify-start md:justify-end">
             {socialLinks.map((link) => (
               <a
-                key={link.label}
+                key={link.name}
                 href={link.href}
-                aria-label={link.label}
-                className="p-3 border-2 border-accent/50 rounded-full hover:bg-accent hover:border-accent transition-all duration-300 hover:shadow-glow-cyan group"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full border border-neon-green/20 hover:bg-neon-green/10 hover:border-neon-green transition-all duration-300 hover:shadow-glow-green group"
+                aria-label={link.name}
               >
-                <link.icon className="h-5 w-5 text-accent group-hover:text-background transition-colors" />
+                <link.icon className="h-5 w-5 text-neon-green transition-colors" />
               </a>
             ))}
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Zeeka Tech Agency. All rights reserved.</p>
+        <div className="mt-8 pt-8 border-t border-glass-border text-center">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} NextGen Systems. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
