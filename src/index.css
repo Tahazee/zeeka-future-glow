@@ -8,6 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* Base colors */
+    --bg: 0 0% 4%;
     --background: 0 0% 4%;
     --foreground: 0 0% 100%;
     --card: 0 0% 8%;
@@ -19,7 +21,7 @@ All colors MUST be HSL.
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 70%;
+    --muted-foreground: 0 0% 75%;
     --accent: 180 100% 50%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 62.8% 30.6%;
@@ -27,23 +29,37 @@ All colors MUST be HSL.
     --border: 0 0% 15%;
     --input: 0 0% 15%;
     --ring: 165 100% 50%;
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
-    /* Custom Glassmorphism Colors */
+    /* Glassmorphism system */
+    --card-bg: 0 0% 100% / 0.03;
+    --glass-bg: 0 0% 100% / 0.06;
+    --glass-border: 0 0% 100% / 0.08;
+    --glass-blur: 14px;
+    
+    /* Accent colors */
+    --accent-cyan: 188 100% 50%;
+    --accent-green: 165 100% 50%;
+    --accent-purple: 275 100% 51%;
     --neon-green: 165 100% 50%;
     --neon-aqua: 180 100% 50%;
-    --glass-bg: 0 0% 0%;
-    --glass-border: 0 0% 20%;
+    --white: 0 0% 100%;
 
-    /* Gradients */
-    --gradient-glass: linear-gradient(135deg, hsl(165 100% 50% / 0.1), hsl(180 100% 50% / 0.1));
-    --gradient-glow: radial-gradient(ellipse at center, hsl(165 100% 50% / 0.2), transparent);
-    --gradient-hero: radial-gradient(ellipse at top, hsl(0 0% 8%), hsl(0 0% 4%));
-
-    /* Shadows */
+    /* Shadows & 3D */
+    --shadow-3d: 0 10px 30px rgba(0, 0, 0, 0.6);
     --shadow-glow-green: 0 0 30px hsl(165 100% 50% / 0.5), 0 0 60px hsl(165 100% 50% / 0.3);
     --shadow-glow-aqua: 0 0 30px hsl(180 100% 50% / 0.5), 0 0 60px hsl(180 100% 50% / 0.3);
+    --shadow-glow-purple: 0 0 30px hsl(275 100% 51% / 0.4), 0 0 60px hsl(275 100% 51% / 0.2);
     --shadow-glass: 0 8px 32px 0 hsl(0 0% 0% / 0.5);
+
+    /* Gradients */
+    --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(165 100% 50% / 0.2), transparent);
+    --gradient-hero: radial-gradient(ellipse at top, hsl(0 0% 8%), hsl(0 0% 4%));
+    --gradient-button: linear-gradient(90deg, hsl(275 100% 51%), hsl(188 100% 50%));
+
+    /* Easing */
+    --ease-smooth: cubic-bezier(0.2, 0.9, 0.25, 1);
   }
 }
 
@@ -60,14 +76,84 @@ All colors MUST be HSL.
   html {
     scroll-behavior: smooth;
   }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@layer utilities {
+  /* Glass card system */
+  .glass-card {
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--glass-border));
+    backdrop-filter: blur(var(--glass-blur));
+    box-shadow: var(--shadow-3d);
+    transition: transform 0.45s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth);
+    transform-style: preserve-3d;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  .glass-card:hover {
+    transform: translateZ(24px) scale(1.03);
+    box-shadow: 0 20px 50px rgba(0, 229, 255, 0.06), 0 0 12px rgba(164, 0, 255, 0.06);
+  }
+
+  /* Backdrop blur utilities */
+  .backdrop-blur-glass {
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+  }
+
+  /* Transform utilities */
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+}
+
+@layer components {
+  /* Animation keyframes */
+  @keyframes float {
+    0% { transform: translateY(0) translateZ(0); }
+    50% { transform: translateY(-12px) translateZ(8px); }
+    100% { transform: translateY(0) translateZ(0); }
+  }
+
+  @keyframes titleIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) skewY(-3deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 }
