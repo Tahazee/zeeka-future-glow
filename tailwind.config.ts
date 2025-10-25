@@ -77,6 +77,7 @@ export default {
         'glass': 'var(--shadow-glass)',
         'glow-green': 'var(--shadow-glow-green)',
         'glow-aqua': 'var(--shadow-glow-aqua)',
+        'glow-cyan': 'var(--shadow-glow-cyan)',
         'glow-purple': 'var(--shadow-glow-purple)',
         '3d': 'var(--shadow-3d)',
       },

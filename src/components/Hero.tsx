@@ -3,10 +3,14 @@ import { Calendar, ChevronLeft, ChevronRight, Users, TrendingUp, Zap, Clock, Spa
 import { Button } from "./ui/button";
 import vrHero from "@/assets/vr-hero.jpg";
 import workspaceHero from "@/assets/workspace-hero.jpg";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLElement>(null);
+  const titleRef = useScrollReveal({ threshold: 0.3 });
+  const leftColRef = useScrollReveal({ threshold: 0.2, delay: 100 });
+  const rightColRef = useScrollReveal({ threshold: 0.2, delay: 300 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -43,16 +47,26 @@ export default function Hero() {
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-accent-purple/10 to-background" />
       
-      {/* Crystal orbs background */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent-cyan/20 blur-3xl animate-crystal" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-accent-purple/20 blur-3xl animate-crystal" style={{ animationDelay: '2s' }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-green/10 blur-3xl animate-crystal" style={{ animationDelay: '4s' }} />
+      {/* Crystal orbs background with parallax */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent-cyan/20 blur-3xl animate-crystal animate-drift" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-accent-purple/20 blur-3xl animate-crystal animate-drift" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-green/10 blur-3xl animate-crystal animate-drift" style={{ animationDelay: '4s' }} />
+      
+      {/* Floating particles */}
+      <div className="absolute top-20 left-1/4 w-2 h-2 rounded-full bg-accent-cyan/40 animate-particle-float" />
+      <div className="absolute top-40 right-1/3 w-3 h-3 rounded-full bg-accent-purple/30 animate-particle-float" style={{ animationDelay: '1s' }} />
+      <div className="absolute bottom-40 left-1/3 w-2 h-2 rounded-full bg-accent-green/40 animate-particle-float" style={{ animationDelay: '2s' }} />
+      <div className="absolute bottom-20 right-1/4 w-3 h-3 rounded-full bg-accent-cyan/30 animate-particle-float" style={{ animationDelay: '3s' }} />
+      
+      {/* Rotating decorative rings */}
+      <div className="absolute top-32 right-20 w-32 h-32 rounded-full border border-accent-cyan/10 animate-rotate-slow" />
+      <div className="absolute bottom-32 left-20 w-40 h-40 rounded-full border border-accent-purple/10 animate-rotate-slow" style={{ animationDelay: '5s' }} />
 
       <div className="container mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
           {/* LEFT COLUMN - Featured Card & Schedule */}
-          <div className="lg:col-span-3 space-y-6 animate-slide-in-up">
+          <div ref={leftColRef as any} className="lg:col-span-3 space-y-6 scroll-reveal-left">
             
             {/* Featured System Card */}
             <div className="group relative preserve-3d">
@@ -125,25 +139,25 @@ export default function Hero() {
           </div>
 
           {/* CENTER COLUMN - Main 3D Content & Hero Images */}
-          <div className="lg:col-span-6 space-y-6 animate-slide-in-up" style={{ animationDelay: '0.2s' }}>
+          <div className="lg:col-span-6 space-y-6">
             
             {/* Main Title */}
-            <div className="text-center mb-8">
-              <div className="inline-block mb-4">
-                <span className="text-xs uppercase tracking-[0.3em] text-accent-cyan font-bold px-4 py-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/5 backdrop-blur-sm">
+            <div ref={titleRef as any} className="text-center mb-8 scroll-reveal">
+              <div className="inline-block mb-4 animate-scale-pulse">
+                <span className="text-xs uppercase tracking-[0.3em] text-accent-cyan font-bold px-4 py-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/5 backdrop-blur-sm animate-glow-pulse">
                   Innovation Hub
                 </span>
               </div>
               <h1 className="text-5xl md:text-7xl font-black leading-tight mb-6">
-                <span className="bg-gradient-to-r from-foreground via-accent-cyan to-accent-purple bg-clip-text text-transparent">
+                <span className="inline-block animate-text-reveal bg-gradient-to-r from-foreground via-accent-cyan to-accent-purple bg-clip-text text-transparent stagger-1">
                   Meet the
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-accent-cyan via-accent-green to-accent-purple bg-clip-text text-transparent animate-shimmer" style={{ backgroundSize: '200% auto' }}>
+                <span className="inline-block animate-text-reveal bg-gradient-to-r from-accent-cyan via-accent-green to-accent-purple bg-clip-text text-transparent animate-shimmer stagger-2" style={{ backgroundSize: '200% auto' }}>
                   New Reality
                 </span>
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-text-reveal stagger-3">
                 Conquer leaderboards, crush workouts — create with friends and more.
               </p>
             </div>
@@ -223,10 +237,10 @@ export default function Hero() {
           </div>
 
           {/* RIGHT COLUMN - Stats & Metrics */}
-          <div className="lg:col-span-3 space-y-6 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
+          <div ref={rightColRef as any} className="lg:col-span-3 space-y-6 scroll-reveal-right">
             
             {/* Performance Report */}
-            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+            <div className="glass-card rounded-2xl p-6 border border-glass-border hover:border-accent-cyan/30 transition-all duration-500 hover:scale-105 hover:shadow-glow-cyan">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-accent-green" />
                 <span className="text-sm font-bold">Performance Report</span>
@@ -250,7 +264,7 @@ export default function Hero() {
             </div>
 
             {/* Team Members */}
-            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+            <div className="glass-card rounded-2xl p-6 border border-glass-border hover:border-accent-purple/30 transition-all duration-500 hover:scale-105 hover:shadow-glow-purple">
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-accent-purple" />
                 <span className="text-sm font-bold">Your Team</span>
@@ -276,7 +290,7 @@ export default function Hero() {
             </div>
 
             {/* Key Metrics */}
-            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+            <div className="glass-card rounded-2xl p-6 border border-glass-border hover:border-accent-green/30 transition-all duration-500 hover:scale-105">
               <h4 className="text-sm font-bold mb-4">Key Metrics Summary</h4>
               
               <div className="space-y-4">

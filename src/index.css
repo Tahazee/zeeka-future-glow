@@ -49,6 +49,7 @@ All colors MUST be HSL.
     --shadow-3d: 0 10px 30px rgba(0, 0, 0, 0.6);
     --shadow-glow-green: 0 0 30px hsl(165 100% 50% / 0.5), 0 0 60px hsl(165 100% 50% / 0.3);
     --shadow-glow-aqua: 0 0 30px hsl(180 100% 50% / 0.5), 0 0 60px hsl(180 100% 50% / 0.3);
+    --shadow-glow-cyan: 0 0 30px hsl(188 100% 50% / 0.5), 0 0 60px hsl(188 100% 50% / 0.3);
     --shadow-glow-purple: 0 0 30px hsl(275 100% 51% / 0.4), 0 0 60px hsl(275 100% 51% / 0.2);
     --shadow-glass: 0 8px 32px 0 hsl(0 0% 0% / 0.5);
 
@@ -201,6 +202,120 @@ All colors MUST be HSL.
     }
   }
 
+  @keyframes drift {
+    0%, 100% {
+      transform: translateX(0) translateY(0);
+    }
+    33% {
+      transform: translateX(20px) translateY(-20px);
+    }
+    66% {
+      transform: translateX(-20px) translateY(20px);
+    }
+  }
+
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes text-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes glow-pulse-cyan {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(188 100% 50% / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(188 100% 50% / 0.6), 0 0 60px hsl(188 100% 50% / 0.3);
+    }
+  }
+
+  @keyframes rotate-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes scale-pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Scroll reveal animations */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+  }
+
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+  }
+
+  .scroll-reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+  }
+
+  .scroll-reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-reveal-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+  }
+
+  .scroll-reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Stagger delays for child elements */
+  .stagger-1 { transition-delay: 0.1s; animation-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; animation-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; animation-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; animation-delay: 0.4s; }
+  .stagger-5 { transition-delay: 0.5s; animation-delay: 0.5s; }
+  .stagger-6 { transition-delay: 0.6s; animation-delay: 0.6s; }
+
   .animate-crystal {
     animation: crystal 6s ease-in-out infinite;
   }
@@ -215,5 +330,29 @@ All colors MUST be HSL.
 
   .animate-prism {
     animation: prism 4s ease-in-out infinite;
+  }
+
+  .animate-drift {
+    animation: drift 20s ease-in-out infinite;
+  }
+
+  .animate-particle-float {
+    animation: particle-float 8s ease-in-out infinite;
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 1s ease-out forwards;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse-cyan 3s ease-in-out infinite;
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 30s linear infinite;
+  }
+
+  .animate-scale-pulse {
+    animation: scale-pulse 2s ease-in-out infinite;
   }
 }
