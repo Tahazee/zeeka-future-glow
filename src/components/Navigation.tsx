@@ -7,7 +7,7 @@ export const Navigation = () => {
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
       <div
-        className="relative flex items-center justify-between px-8 py-4 w-[90vw] md:w-[720px]
+        className="relative flex items-center justify-between px-8 py-4 w-[70vw] md:w-[650px]
         rounded-full backdrop-blur-3xl bg-white/5 border border-white/10
         shadow-[0_0_40px_rgba(255,255,255,0.1)] 
         before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:opacity-10
