@@ -1,179 +1,320 @@
-import React, { Suspense, useRef, useState, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Torus, Sparkles, Html, Float, Effects } from "@react-three/drei";
-import { UnrealBloomPass } from "three-stdlib";
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import React, { useEffect, useRef, useState } from "react";
+import { Calendar, ChevronLeft, ChevronRight, Users, TrendingUp, Zap, Clock, Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import vrHero from "@/assets/vr-hero.jpg";
 import workspaceHero from "@/assets/workspace-hero.jpg";
-import { Play } from "lucide-react";
-
-// NOTE: This file is a single-file React component with Tailwind classes.
-// Requirements (install in your project):
-// npm i three @react-three/fiber @react-three/drei @react-three/postprocessing three-stdlib framer-motion
-// TailwindCSS must be configured in your project.
-
-function Orb({ mouse }) {
-  const ref = useRef<any>();
-  const glowRef = useRef<any>();
-  const { viewport } = useThree();
-
-  useFrame((state, delta) => {
-    // gentle rotation
-    if (ref.current) ref.current.rotation.y += delta * 0.15;
-    // subtle follow of mouse
-    if (ref.current) {
-      ref.current.rotation.x += (mouse.current.y * 0.5 - ref.current.rotation.x) * 0.08;
-      ref.current.rotation.y += (mouse.current.x * 0.5 - ref.current.rotation.y) * 0.08;
-    }
-    // pulse glow scale
-    if (glowRef.current) {
-      const s = 1 + Math.sin(state.clock.getElapsedTime() * 2) * 0.03;
-      glowRef.current.scale.set(s, s, s);
-    }
-  });
-
-  return (
-    <group ref={ref} dispose={null}>
-      {/* outer wireframe ring */}
-      <group rotation={[0.3, 0.6, 0]}>
-        <mesh>
-          <torusGeometry args={[1.55, 0.04, 16, 200]} />
-          <meshStandardMaterial emissive="#7ce7ff" emissiveIntensity={0.08} color="#000000" metalness={0.9} roughness={0.2} />
-        </mesh>
-        <mesh rotation={[0.2, -0.3, 0]}>
-          <torusGeometry args={[1.25, 0.03, 16, 200]} />
-          <meshStandardMaterial emissive="#b36bff" emissiveIntensity={0.06} color="#000000" metalness={0.9} roughness={0.2} />
-        </mesh>
-      </group>
-
-      {/* core glowing sphere */}
-      <mesh>
-        <sphereGeometry args={[0.9, 64, 64]} />
-        <meshStandardMaterial emissive="#9effff" emissiveIntensity={1.2} color="#120016" metalness={0.6} roughness={0.15} />
-      </mesh>
-
-      {/* inner animated pattern - torus knot to give complexity */}
-      <mesh position={[0, 0, 0]} rotation={[Math.PI * 0.2, 0, 0]}> 
-        <torusKnotGeometry args={[0.5, 0.12, 128, 32]} />
-        <meshStandardMaterial emissive="#ff73e1" emissiveIntensity={0.7} color="#2a0030" metalness={0.7} roughness={0.1} />
-      </mesh>
-
-      {/* soft glow layer (scaled translucent sphere) */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[1.4, 64, 64]} />
-        <meshBasicMaterial transparent opacity={0.18} toneMapped={false} color="#8df0ff" />
-      </mesh>
-
-      {/* sparkles for extra neon flakes */}
-      <Sparkles count={40} scale={2.2} size={6} speed={0.35} />
-    </group>
-  );
-}
-
-function Scene({ mouse }: { mouse: React.MutableRefObject<{ x: number; y: number }> }) {
-  return (
-    <>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 5, 5]} intensity={0.6} />
-      <pointLight position={[-3, 2, -5]} intensity={0.8} color="#47f0ff" />
-      <pointLight position={[3, -2, 5]} intensity={0.5} color="#b46bff" />
-
-      <Float floatIntensity={0.8} rotationIntensity={0.2}>
-        <Orb mouse={mouse} />
-      </Float>
-
-      <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
-
-      {/* postprocessing bloom to get neon glow */}
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.1} mipmapBlur intensity={0.9} />
-      </EffectComposer>
-    </>
-  );
-}
 
 export default function Hero() {
-  const mouse = useRef({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-      mouse.current.x = x;
-      mouse.current.y = y;
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!heroRef.current) return;
+      const rect = heroRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+      setMousePosition({ x: x * 20, y: y * 20 });
     };
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  const scheduleItems = [
+    { time: "09:00 AM", title: "VR Experience Design", status: "ongoing" },
+    { time: "11:30 AM", title: "AI Integration Workshop", status: "upcoming" },
+    { time: "02:00 PM", title: "Team Collaboration", status: "upcoming" },
+  ];
+
+  const teamMembers = [
+    { name: "Sarah", avatar: "bg-gradient-to-br from-accent-cyan to-accent-green" },
+    { name: "Mike", avatar: "bg-gradient-to-br from-accent-purple to-accent-cyan" },
+    { name: "Alex", avatar: "bg-gradient-to-br from-accent-green to-accent-purple" },
+  ];
+
   return (
-    <section ref={containerRef} id="home" className="relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
-      {/* background gradient similar to reference */}
-      <div className="absolute inset-0 -z-10" style={{ background: 'linear-gradient(90deg, #000000 0%, #0b0420 35%, #2b0050 70%)' }} />
+    <section 
+      ref={heroRef}
+      id="home" 
+      className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-20 px-4 sm:px-6 lg:px-8" 
+      aria-label="Hero Dashboard"
+    >
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-accent-purple/10 to-background" />
+      
+      {/* Crystal orbs background */}
+      <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent-cyan/20 blur-3xl animate-crystal" />
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-accent-purple/20 blur-3xl animate-crystal" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-green/10 blur-3xl animate-crystal" style={{ animationDelay: '4s' }} />
 
-      {/* left-side content */}
-      <div className="container mx-auto px-6 lg:px-20 relative z-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
+      <div className="container mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          
+          {/* LEFT COLUMN - Featured Card & Schedule */}
+          <div className="lg:col-span-3 space-y-6 animate-slide-in-up">
+            
+            {/* Featured System Card */}
+            <div className="group relative preserve-3d">
+              <div className="absolute inset-0 bg-accent-cyan/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div 
+                className="relative backdrop-blur-glass bg-gradient-to-br from-glass-bg to-transparent border border-glass-border rounded-2xl p-6 overflow-hidden transition-all duration-700 group-hover:border-accent-cyan/50 group-hover:scale-105"
+                style={{
+                  transform: `perspective(1000px) rotateX(${mousePosition.y * 0.3}deg) rotateY(${mousePosition.x * 0.3}deg)`
+                }}
+              >
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent-cyan via-accent-green to-transparent" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-green flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-background" />
+                    </div>
+                    <span className="text-xs uppercase tracking-wider text-accent-cyan font-bold">Featured</span>
+                  </div>
+                  
+                  <h3 className="text-2xl font-black mb-2 bg-gradient-to-r from-foreground to-accent-cyan bg-clip-text text-transparent">
+                    NEXTGEN SYSTEMS
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Experience the future of digital innovation
+                  </p>
+                  
+                  <Button className="w-full bg-gradient-to-r from-accent-cyan to-accent-green text-background font-bold hover:scale-105 transition-transform">
+                    Join Now
+                  </Button>
+                </div>
+              </div>
+            </div>
 
-          {/* Left text column */}
-          <div className="lg:col-span-6 text-left pt-16 lg:pt-32">
-            <div className="max-w-xl">
-              <h1 className="text-6xl md:text-7xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-[#9be9ff]">
-                Meet the
+            {/* Schedule Date Card */}
+            <div className="glass-card rounded-2xl p-4 border border-glass-border">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-accent-cyan" />
+                  <span className="text-sm font-bold">Today's Schedule</span>
+                </div>
+                <div className="flex gap-1">
+                  <button className="w-6 h-6 rounded-lg hover:bg-glass-bg flex items-center justify-center transition-colors">
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button className="w-6 h-6 rounded-lg hover:bg-glass-bg flex items-center justify-center transition-colors">
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                {scheduleItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-glass-bg transition-colors group"
+                  >
+                    <Clock className={`w-4 h-4 mt-0.5 ${item.status === 'ongoing' ? 'text-accent-green' : 'text-muted-foreground'}`} />
+                    <div className="flex-1">
+                      <div className="text-xs text-muted-foreground mb-1">{item.time}</div>
+                      <div className="text-sm font-bold group-hover:text-accent-cyan transition-colors">{item.title}</div>
+                    </div>
+                    {item.status === 'ongoing' && (
+                      <div className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* CENTER COLUMN - Main 3D Content & Hero Images */}
+          <div className="lg:col-span-6 space-y-6 animate-slide-in-up" style={{ animationDelay: '0.2s' }}>
+            
+            {/* Main Title */}
+            <div className="text-center mb-8">
+              <div className="inline-block mb-4">
+                <span className="text-xs uppercase tracking-[0.3em] text-accent-cyan font-bold px-4 py-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/5 backdrop-blur-sm">
+                  Innovation Hub
+                </span>
+              </div>
+              <h1 className="text-5xl md:text-7xl font-black leading-tight mb-6">
+                <span className="bg-gradient-to-r from-foreground via-accent-cyan to-accent-purple bg-clip-text text-transparent">
+                  Meet the
+                </span>
                 <br />
-                <span className="block text-6xl md:text-7xl">New Reality</span>
+                <span className="bg-gradient-to-r from-accent-cyan via-accent-green to-accent-purple bg-clip-text text-transparent animate-shimmer" style={{ backgroundSize: '200% auto' }}>
+                  New Reality
+                </span>
               </h1>
-              <p className="mt-6 text-lg text-[#b8c6d8]">Conquer leaderboards, crush workouts — create with friends and more.</p>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Conquer leaderboards, crush workouts — create with friends and more.
+              </p>
+            </div>
 
-              <div className="mt-8 flex items-center gap-4">
-                <Button size="lg" className="bg-gradient-to-r from-[#7b3cff] to-[#05d3ff] text-white shadow-2xl px-6 py-3">Get Started</Button>
-
-                <div className="ml-4 flex items-center gap-3 bg-black/30 border border-white/6 rounded-lg px-3 py-2 backdrop-blur-sm">
-                  <div className="w-12 h-12 rounded-md overflow-hidden">
-                    <img src={vrHero} alt="vr" className="object-cover w-full h-full" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold">PC VR</div>
-                    <div className="text-xs text-[#9aa6b6]">Play has no limits</div>
-                  </div>
-                  <div className="ml-3 w-10 h-10 rounded-full bg-gradient-to-br from-[#ff7bd4]/20 to-[#05d3ff]/20 flex items-center justify-center">
-                    <Play className="w-4 h-4 text-white" />
+            {/* Central 3D Element with floating images */}
+            <div className="relative min-h-[400px] flex items-center justify-center">
+              
+              {/* Central glowing orb */}
+              <div 
+                className="absolute w-48 h-48 rounded-full bg-gradient-to-br from-accent-cyan via-accent-green to-accent-purple blur-3xl opacity-50 animate-prism"
+                style={{
+                  transform: `perspective(1000px) rotateX(${mousePosition.y}deg) rotateY(${mousePosition.x}deg)`
+                }}
+              />
+              
+              {/* Floating VR Image Card - Top Left */}
+              <div 
+                className="absolute top-0 left-0 md:left-12 w-32 h-32 md:w-48 md:h-48 group preserve-3d"
+                style={{
+                  transform: `perspective(1000px) translateZ(50px) rotateX(${mousePosition.y * 0.5}deg) rotateY(${mousePosition.x * 0.5}deg)`,
+                  animation: 'float 6s ease-in-out infinite'
+                }}
+              >
+                <div className="absolute inset-0 bg-accent-cyan/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-glass-border backdrop-blur-glass shadow-2xl group-hover:border-accent-cyan/50 transition-all duration-700">
+                  <img src={vrHero} alt="VR Experience" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    <p className="text-xs font-bold text-accent-cyan">VR Experience</p>
                   </div>
                 </div>
               </div>
 
+              {/* Floating Workspace Image Card - Top Right */}
+              <div 
+                className="absolute top-0 right-0 md:right-12 w-32 h-32 md:w-44 md:h-44 group preserve-3d"
+                style={{
+                  transform: `perspective(1000px) translateZ(30px) rotateX(${mousePosition.y * -0.4}deg) rotateY(${mousePosition.x * -0.4}deg)`,
+                  animation: 'float 7s ease-in-out infinite',
+                  animationDelay: '1s'
+                }}
+              >
+                <div className="absolute inset-0 bg-accent-purple/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-glass-border backdrop-blur-glass shadow-2xl group-hover:border-accent-purple/50 transition-all duration-700">
+                  <img src={workspaceHero} alt="Workspace" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    <p className="text-xs font-bold text-accent-purple">Digital Workspace</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating crystal orbs */}
+              <div 
+                className="absolute bottom-4 left-1/4 w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-accent-cyan/30 to-accent-green/30 backdrop-blur-glass border border-glass-border shadow-glow-cyan"
+                style={{
+                  transform: `perspective(1000px) translateZ(20px) rotateX(${mousePosition.y * 0.6}deg) rotateY(${mousePosition.x * 0.6}deg)`,
+                  animation: 'float 5s ease-in-out infinite',
+                  animationDelay: '0.5s'
+                }}
+              />
+              
+              <div 
+                className="absolute bottom-8 right-1/4 w-12 h-12 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-accent-purple/30 to-accent-cyan/30 backdrop-blur-glass border border-glass-border shadow-glow-purple"
+                style={{
+                  transform: `perspective(1000px) translateZ(40px) rotateX(${mousePosition.y * -0.7}deg) rotateY(${mousePosition.x * -0.7}deg)`,
+                  animation: 'float 8s ease-in-out infinite',
+                  animationDelay: '2s'
+                }}
+              />
+
+              {/* Center sparkle effect */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <Sparkles className="w-12 h-12 text-accent-cyan/50 animate-pulse" />
+              </div>
             </div>
           </div>
 
-          {/* Center 3D canvas */}
-          <div className="lg:col-span-6 relative flex items-center justify-center min-h-[520px]">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <Canvas camera={{ position: [0, 0, 4], fov: 50 }} style={{ width: '100%', height: '100%' }}>
-                <Suspense fallback={null}>
-                  <Scene mouse={mouse} />
-                </Suspense>
-              </Canvas>
+          {/* RIGHT COLUMN - Stats & Metrics */}
+          <div className="lg:col-span-3 space-y-6 animate-slide-in-up" style={{ animationDelay: '0.4s' }}>
+            
+            {/* Performance Report */}
+            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-5 h-5 text-accent-green" />
+                <span className="text-sm font-bold">Performance Report</span>
+              </div>
+              
+              <div className="h-32 flex items-end justify-between gap-2 mb-4">
+                {[40, 65, 45, 80, 60, 75, 90].map((height, i) => (
+                  <div key={i} className="flex-1 group">
+                    <div 
+                      className="w-full bg-gradient-to-t from-accent-cyan to-accent-green rounded-t-lg transition-all duration-1000 group-hover:from-accent-purple group-hover:to-accent-cyan"
+                      style={{ 
+                        height: `${height}%`,
+                        animationDelay: `${i * 0.1}s`
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              <div className="text-xs text-muted-foreground text-center">Weekly Analytics</div>
             </div>
 
-            {/* decorative floating cards and orbs over canvas - purely DOM to match reference */}
-            <div className="absolute left-8 top-12 w-36 h-36 rounded-xl overflow-hidden shadow-2xl border border-white/6 backdrop-blur-sm">
-              <img src={workspaceHero} className="w-full h-full object-cover" alt="workspace" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
+            {/* Team Members */}
+            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-5 h-5 text-accent-purple" />
+                <span className="text-sm font-bold">Your Team</span>
+              </div>
+              
+              <div className="flex -space-x-3 mb-4">
+                {teamMembers.map((member, i) => (
+                  <div 
+                    key={i}
+                    className={`w-10 h-10 rounded-full ${member.avatar} border-2 border-background flex items-center justify-center text-xs font-bold hover:scale-110 hover:z-10 transition-transform cursor-pointer`}
+                  >
+                    {member.name[0]}
+                  </div>
+                ))}
+                <div className="w-10 h-10 rounded-full bg-glass-bg border-2 border-glass-border flex items-center justify-center text-xs font-bold hover:scale-110 hover:z-10 transition-transform cursor-pointer">
+                  +5
+                </div>
+              </div>
+              
+              <Button size="sm" variant="outline" className="w-full text-xs border-glass-border hover:border-accent-cyan hover:text-accent-cyan">
+                View All Members
+              </Button>
             </div>
 
-            <div className="absolute right-12 top-20 w-20 h-20 rounded-full bg-gradient-to-br from-[#05d3ff]/20 to-[#7b3cff]/20 shadow-2xl" />
-            <div className="absolute left-20 bottom-14 w-14 h-14 rounded-full bg-gradient-to-br from-[#7b3cff]/20 to-[#05d3ff]/20 shadow-2xl" />
+            {/* Key Metrics */}
+            <div className="glass-card rounded-2xl p-6 border border-glass-border">
+              <h4 className="text-sm font-bold mb-4">Key Metrics Summary</h4>
+              
+              <div className="space-y-4">
+                <div className="group">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-muted-foreground">Clients</span>
+                    <span className="text-sm font-bold text-accent-cyan">24+</span>
+                  </div>
+                  <div className="h-1.5 bg-glass-border rounded-full overflow-hidden">
+                    <div className="h-full w-3/4 bg-gradient-to-r from-accent-cyan to-accent-green rounded-full transition-all duration-1000 group-hover:w-full" />
+                  </div>
+                </div>
+                
+                <div className="group">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-muted-foreground">Growth</span>
+                    <span className="text-sm font-bold text-accent-green">4.5x</span>
+                  </div>
+                  <div className="h-1.5 bg-glass-border rounded-full overflow-hidden">
+                    <div className="h-full w-4/5 bg-gradient-to-r from-accent-green to-accent-purple rounded-full transition-all duration-1000 group-hover:w-full" />
+                  </div>
+                </div>
+                
+                <div className="group">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-muted-foreground">Success Rate</span>
+                    <span className="text-sm font-bold text-accent-purple">98%</span>
+                  </div>
+                  <div className="h-1.5 bg-glass-border rounded-full overflow-hidden">
+                    <div className="h-full w-full bg-gradient-to-r from-accent-purple to-accent-cyan rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
-
-      {/* subtle vignette and extra glow */}
-      <div className="absolute inset-0 -z-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 70% 40%, rgba(34,12,60,0.28), transparent 20%), radial-gradient(circle at 20% 80%, rgba(0,20,40,0.2), transparent 15%)' }} />
     </section>
   );
 }
